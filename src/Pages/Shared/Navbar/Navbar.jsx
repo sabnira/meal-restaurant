@@ -22,7 +22,11 @@ const Navbar = () => {
         {
             user ? 
             <>
+                <div>
+                    <span className="bg-amber-50 text-black rounded-2xl px-5">{user?.displayName}</span>
                 <button onClick={handleLogOut}  >LogOut</button>
+                </div>
+                
             </> : <>
                 <Link to="/login">Login</Link>
             </>
