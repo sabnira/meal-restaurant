@@ -4,11 +4,15 @@ import { useForm } from "react-hook-form";
 import { NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "../providers/AuthProvider";
 import Swal from "sweetalert2";
+import useAxiosPublic from "../hooks/useAxiosPublic";
+import SocialLogin from "../components/SocialLogin/SocialLogin";
 
 
 
 
 const SignUp = () => {
+
+    const axiosPublic = useAxiosPublic()
 
     const { register, handleSubmit, reset,
         formState: { errors } } = useForm();
@@ -18,25 +22,37 @@ const SignUp = () => {
     const navigate = useNavigate()
 
     const onSubmit = data => {
-        console.log(data);
+        // console.log(data);
         createUser(data.email, data.password)
             .then(result => {
                 const loggedUser = result.user;
                 console.log(loggedUser);
                 updateUserProfile(data.name, data.photoURL)
                     .then(() => {
-                        console.log('user profile info updated')
-                        reset()
 
-                        Swal.fire({
-                            icon: "success",
-                            title: "Sign up Successful",
-                            text: "User created successfully.",
-                            confirmButtonColor: "#43934A"
-                        });
-                        
-                        navigate('/') 
-                        
+                        //create user entry in the database
+                        const userInfo = {
+                            name: data.name,
+                            email: data.email
+                        }
+                        axiosPublic.post('/users', userInfo)
+                            .then(res => {
+                                if (res.data.insertedId) {
+
+                                    console.log('user added to the database');
+                                    reset()
+
+                                    Swal.fire({
+                                        icon: "success",
+                                        title: "Sign up Successful",
+                                        text: "User created successfully.",
+                                        confirmButtonColor: "#43934A"
+                                    });
+
+                                    navigate('/')
+                                }
+                            })
+
                     })
                     .catch(error => console.log(error))
             })
@@ -95,7 +111,10 @@ const SignUp = () => {
                                 <input className="btn btn-neutral mt-4" type="submit" value="Sign Up" />
 
                             </form>
-                            <p className="text-center text-lg">
+
+                            <SocialLogin></SocialLogin>
+
+                            <p className="px-6 text-center text-lg">
                                 Already Have An Account?
                                 <NavLink to="/login"
                                     className="text-orange-400 font-bold underline hover:text-orange-300">
