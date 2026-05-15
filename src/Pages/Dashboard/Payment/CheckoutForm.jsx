@@ -4,6 +4,7 @@ import { useState } from 'react';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import useCarts from '../../../hooks/useCarts';
 import { AuthContext } from '../../../providers/AuthProvider';
+import Swal from 'sweetalert2';
 
 const CheckoutForm = () => {
 
@@ -14,8 +15,8 @@ const CheckoutForm = () => {
     const stripe = useStripe();
     const elements = useElements();
     const axiosSecure = useAxiosSecure();
-    const {user} = useContext(AuthContext);
-    const [cart] = useCarts();
+    const { user } = useContext(AuthContext);
+    const [cart, refetch] = useCarts();
     const totalPrice = cart.reduce((total, item) => total + item.price, 0)
 
 
@@ -70,48 +71,72 @@ const CheckoutForm = () => {
             }
         })
 
-        if(confirmError){
+        if (confirmError) {
             console.log('confirm error')
         }
-        else{
+        else {
             console.log('payment intent', paymentIntent);
-            if(paymentIntent.status === 'succeeded'){
+            if (paymentIntent.status === 'succeeded') {
                 console.log('transaction id', paymentIntent.id);
                 setTransactionId(paymentIntent.id)
+
+                //now save the payment in the database
+                const payment = {
+                    email: user.email,
+                    price: totalPrice,
+                    transactionId: paymentIntent.id,
+                    date: new Date(), // utc date convert. use moment.js 
+                    cartIds: cart.map(item => item._id),
+                    menuItemIds: cart.map(item => item.menuId),
+                    status: 'pending'
+                }
+
+                const res = await axiosSecure.post('/payments', payment)
+                console.log('payment saved', res.data);
+
+                refetch()
+
+                if (res.data?.paymentResult?.insertedId) {
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "thank you for your payment",
+                        showConfirmButton: false,
+                          timer: 1500
+                    });
+                }
+
             }
         }
+    }
 
-
-
-}
-
-return (
-    <form onSubmit={handleSubmit}>
-        <CardElement
-            options={{
-                style: {
-                    base: {
-                        fontSize: '16px',
-                        color: '#424770',
-                        '::placeholder': {
-                            color: '#aab7c4',
+    return (
+        <form onSubmit={handleSubmit}>
+            <CardElement
+                options={{
+                    style: {
+                        base: {
+                            fontSize: '16px',
+                            color: '#424770',
+                            '::placeholder': {
+                                color: '#aab7c4',
+                            },
+                        },
+                        invalid: {
+                            color: '#9e2146',
                         },
                     },
-                    invalid: {
-                        color: '#9e2146',
-                    },
-                },
-            }}
-        />
-        <button className='btn btn-sm btn-primary my-4' type="submit" disabled={!stripe || !clientSecret}>
-            Pay
-        </button>
-        <p className='text-red-600'>{error}</p>
-        {
-            transactionId && <p className='text-green-600'> Your transaction id: {transactionId}</p>
-        }
-    </form>
-);
+                }}
+            />
+            <button className='btn btn-sm btn-primary my-4' type="submit" disabled={!stripe || !clientSecret}>
+                Pay
+            </button>
+            <p className='text-red-600'>{error}</p>
+            {
+                transactionId && <p className='text-green-600'> Your transaction id: {transactionId}</p>
+            }
+        </form>
+    );
 };
 
 export default CheckoutForm;
