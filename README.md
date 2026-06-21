@@ -1,16 +1,38 @@
-# React + Vite
+# 🍽️ Meal Restaurant – Restaurant Management Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack **MERN** application for managing a restaurant's day-to-day operations — from menu and order management to secure payments and business analytics. The platform includes separate **Admin** and **User** dashboards for end-to-end control over the restaurant workflow.
 
-Currently, two official plugins are available:
+🔗 **Live Site:** [meal-restaurant-11f1e.web.app](https://meal-restaurant-11f1e.web.app/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 📖 Overview
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Meal Restaurant streamlines restaurant operations by giving admins the tools to manage menus and track performance, while customers get a smooth experience for browsing food items, placing orders, making reservations, and tracking payments — all backed by secure authentication and payment processing.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## ✨ Features
+
+- 🔐 **Secure Authentication** – JWT-based auth with login captcha verification to prevent bot access.
+- 💳 **Stripe Payment Integration** – Secure order checkout and payment processing.
+- 📊 **Admin Dashboard with Data Visualization** – Interactive charts for tracking key business metrics.
+- 🍔 **Menu Management** – Admins can add, update, and remove food items in real time.
+- 🛒 **User Dashboard** – Cart management, order placement, and payment history tracking.
+- 📅 **Reservation & Order Tracking** – Real-time monitoring of customer reservations and order activity.
+- 🔑 **Environment-Secured Credentials** – Firebase, MongoDB, and Stripe keys protected via environment variables.
+
+---
+
+## 🛠️ Tech Stack
+
+| Category        | Technology                  |
+|-----------------|------------------------------|
+| Frontend        | React (Vite), Tailwind CSS  |
+| Backend         | Node.js, Express.js         |
+| Database        | MongoDB                     |
+| Authentication  | JWT, Firebase Auth, Captcha |
+| Payments        | Stripe                      |
+
+---
+
