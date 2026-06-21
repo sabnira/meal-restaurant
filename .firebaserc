@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "bistro-boss-3124f"
-  }
+    "default": "meal-restaurant-11f1e"
+  },
+  "targets": {},
+  "etags": {}
 }
