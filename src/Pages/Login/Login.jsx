@@ -61,7 +61,7 @@ const Login = () => {
     return (
         <>
             <Helmet>
-                <title>Bistro Boss | Login</title>
+                <title>Meal | Login</title>
             </Helmet>
 
             <div className="hero bg-base-200 min-h-screen">
